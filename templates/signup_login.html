@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Website</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
+  </head>
+  <body>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="notification is-danger">
+            {{ messages[0] }}. Go to <a href="{{ url_for('login') }}">login page</a>.
+        </div>
+    {% endif %}
+    {% endwith %}
+    <div class="wrapper">
+        <div class="title-text">
+          <div class="title login">Login Form</div>
+          <div class="title signup">Signup Form</div>
+        </div>
+        <div class="form-container">
+          <div class="slide-controls">
+            <input type="radio" name="slide" id="login" checked> 
+            <!-- {% if not signup_checked or signup_checked == False %} checked {% endif %} -->
+            <input type="radio" name="slide" id="signup">
+            <!-- {% if signup_checked == True %} checked {% endif %}> -->
+            <label for="login" class="slide login">Login</label>
+            <label for="signup" class="slide signup">Signup</label>
+            <div class="slider-tab"></div>
+          </div>
+          <div class="form-inner">
+            <form action="/login" class="login" method="POST">
+              <div class="field">
+                <input type="text" name="email" placeholder="Email Address" required>
+              </div>
+              <div class="field">
+                <input type="password" name="password" placeholder="Password" required>
+              </div>
+              <div class="pass-link"><a href="/forgot-password">Forgot password?</a></div>
+              <div class="field btn">
+                <div class="btn-layer"></div>
+                <input type="submit" value="Login">
+              </div>
+              <div class="signup-link">Not a member? <a href="">Signup now</a></div>
+            </form>
+            
+            <form action="/signup" class="signup" method="POST">
+                <div class="field">
+                    <input type="text" name="username" placeholder="Username" required>
+                </div>
+              <div class="field">
+                <input type="email" name="email" placeholder="Email Address" required>
+              </div>
+              <div class="field">
+                <input type="password" name="password" placeholder="Password" required>
+              </div>
+              <div class="field">
+                <input type="password" name="confirm_password" placeholder="Confirm password" required>
+              </div>
+              <div class="field btn">
+                <div class="btn-layer"></div>
+                <input type="submit" value="Signup">
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static',filename='js/main.js') }}">
+    </script>
+  </body>
+</html>

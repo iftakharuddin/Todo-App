@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Tags - Todo App{% endblock %}
+
+{% block content %}
+
+<div style="margin-top: 50px;" class="ui container">
+    <h1 class="ui center aligned header">Tags</h1>
+
+    <form class="ui form" action="/tag/add" method="post">
+        <div class="field">
+            <label>Tag Name</label>
+            <input type="text" name="title" placeholder="Enter Tag..."><br>
+        </div>
+        <button class="ui blue button" type="submit">Add</button>
+    </form>
+
+    <hr>
+    <div id="tag-list">
+        {% for tag in tag_list %}
+        <div class="ui segment">
+            <p class="ui big header">{{tag.id }} | {{ tag.name }}</p>
+            <a class="ui red button delete-btn" data-id="{{ todo.id }}">Delete</a>
+            <a class="ui blue button" href="/tag/edit/{{ tag.id }}">Edit</a>
+        </div>
+        {% endfor %}
+    </div>
+    
+</div>
+
+{% endblock %}

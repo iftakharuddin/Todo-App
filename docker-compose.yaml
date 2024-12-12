@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+
+  db:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=test
+    ports:
+      - "5431:5432"
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+
+  # web:
+  #   build: .
+  #   depends_on:
+  #     - db
+  #     - redis
+  #   ports:
+  #     - "5000:5000"
+  #   volumes:
+  #     - .:/code
+  #   environment:
+  #     FLASK_ENV: development
+  #     DATABASE_URL: postgresql+psycopg2://test:test@db/test

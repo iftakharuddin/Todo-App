@@ -36,11 +36,11 @@ SQLALCHEMY_DATABASE_URI = os.environ.get(
 )
 ```
 Here, 
-Schema/protocol = postgresql://
-User credentials = [username]:[password] = test:test
-Host = localhost
-Port = 5432. It is the default port for postgreSQL.
-Database Name = test
+Schema/protocol = postgresql://  
+User credentials = [username]:[password] = test:test  
+Host = localhost  
+Port = 5432. It is the default port for postgreSQL.  
+Database Name = test  
 
 ## Database creation and migration
 You can automatically create database tables executing following command: 

@@ -13,7 +13,7 @@ A simple to-do app to manage your daily tasks efficiently.
    ```bash
    cd Todo-App
    ```
-3. Activate virtual environment(for windows):
+3. Install python 3.10.1. Activate virtual environment(for windows):
    ```bash
    .\myenv\Scripts\activate
    ```

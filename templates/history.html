@@ -1,7 +1,29 @@
 {% extends 'base.html' %}
 
-{% block title %}Tags - Todo App{% endblock %}
+{% block title %}History - Todo App{% endblock %}
 
 {% block content %}
 <h1> History </h1>
+
+<div id="todo-list">
+    {% for todo in todo_list %}
+    <div class="ui segment">
+        <p class="ui big header">{{todo.id }} | {{ todo.title }}</p>
+
+        {% if todo.complete == False %}
+        <span class="ui gray label">Not Complete</span>
+        {% else %}
+        <span class="ui green label">Completed</span>
+        {% endif %}
+
+        <span class="ui green label"> Created: {{todo.created_datetime}}</span>
+        <span class="ui {{'red' if todo.priority_level == 'high' else 'orange' if todo.priority_level == 'medium' else 'green' }} label"> {{todo.priority_level}} </span>
+
+        {% for tag in todo.tags %}
+        <span class="ui yellow label">{{ tag.name }}</span>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+
 {% endblock %}

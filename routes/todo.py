@@ -1,4 +1,5 @@
 from models.todo import Todo
+from models.tag import Tag, Todotag
 from app import db, app
 from flask import Flask, redirect, url_for, render_template, request, jsonify
 from flask_login import login_user, login_required, logout_user, current_user
@@ -8,8 +9,11 @@ from src.utils.decorators import check_is_confirmed
 @login_required
 @check_is_confirmed
 def todo():
-    todos = Todo.query.filter_by(user_id=current_user.id)
-    return render_template('todo.html', todo_list=todos)
+    todos = Todo.query.filter_by(user_id=current_user.id, deleted=False).all()
+    tags = Tag.query.filter_by(user_id=current_user.id, deleted=False).all()
+    for todo in todos: 
+        todo.created_datetime = todo.created_datetime.strftime("%B %d, %Y %I:%M %p")
+    return render_template('todo.html', todo_list=todos, tag_list=tags)
 
 @app.route('/todo/add', methods=['POST'])
 @login_required
@@ -18,7 +22,13 @@ def add_todo():
     priority = request.form.get('priority')
     todo = Todo(title, priority, current_user.id)
     db.session.add(todo)
-    db.session.commit()
+    db.session.flush()
+    # print(todo.id, flush=True)
+    tags = request.form.getlist('tag')
+    for tag in tags:
+        todotag = Todotag(todo.id, int(tag))
+        db.session.add(todotag)
+    db.session.commit();
     return redirect(url_for('todo'))
 
 @app.route('/todo/update/<int:id>')
@@ -33,7 +43,8 @@ def update_todo(id):
 @login_required
 def edit_todo(id):
     todo = Todo.query.filter_by(id=id).first()
-    return render_template('edit_todo.html', todo=todo)
+    tags = Tag.query.filter_by(user_id=current_user.id).all()
+    return render_template('edit_todo.html', todo=todo, tags = tags)
 
 @app.route('/todo/save/<int:id>', methods=['POST'])
 @login_required
@@ -49,7 +60,7 @@ def save_todo(id):
 @login_required
 def delete_todo(id = -1):
     todo = Todo.query.filter_by(id = id).first()
-    db.session.delete(todo)
+    todo.deleted = True
     db.session.commit()
     return redirect(url_for('todo'))
 

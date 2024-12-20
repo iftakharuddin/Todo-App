@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Tag{% endblock %}
+
+{% block content %}
+
+<div style="margin-top: 50px;" class="ui container">
+    <h1 class="ui center aligned header">Edit Tag</h1>
+
+    <form class="ui form" action="/tag/save/{{tag.id}}" method="POST">
+        <div class="field">
+            <label>Tag Name</label>
+            <input type="text" name="name" value="{{tag.name}}" placeholder="Enter tag..."><br>
+        </div>
+        <button class="ui blue button" type="submit">Save</button>
+    </form>
+
+    <hr>
+</div>
+
+{% endblock %}

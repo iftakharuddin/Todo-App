@@ -4,4 +4,64 @@
 
 {% block content %}
 <h1> Profile </h1>
+
+<div class="ui red two item menu">
+    <a class="active item">
+      Username
+    </a>
+    <a class="item">
+      {{user.username}}
+    </a>
+  </div>
+  <div class="ui orange two item menu">
+    <a class="active item">
+      Email
+    </a>
+    <a class="item">
+      {{user.email}}
+    </a>
+  </div>
+  <div class="ui yellow two item menu">
+    <a class="active item">
+      Is verified?
+    </a>
+    <a class="item">
+        {% if user.is_verified %}
+            Yes
+        {% else %}
+            No
+        {% endif %}
+    </a>
+  </div>
+  <div class="ui red two item menu">
+    <a class="active item">
+      Verified on
+    </a>
+    <a class="item">
+      {{user.verified_on}}
+    </a>
+  </div>
+
+  <div class="ui orange two item menu">
+    <a class="active item">
+      Created at
+    </a>
+    <a class="item">
+      {{user.created_at}}
+    </a>
+  </div>
+
+  <div class="ui yellow two item menu">
+    <a class="active item">
+      Is admin?
+    </a>
+    <a class="item">
+        {% if user.is_admin %}
+            Yes
+        {% else %}
+            No
+        {% endif %}
+    </a>
+  </div>
+
 {% endblock %}

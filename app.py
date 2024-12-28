@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_caching import Cache
 from flask_login import LoginManager
-from flask_mail import Mail
+from extensions import db, mail
 
 import os
 
@@ -13,18 +13,24 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 app.config.from_object('config.DevelopmentConfig')
 
-db = SQLAlchemy(app)
+db.init_app(app)
 cache = Cache(app)
 migrate = Migrate(app, db)
-mail = Mail(app)
+mail.init_app(app)
 
-from routes.todo import *
-from routes.user import *
-from routes.tag import *
-from routes.history import *
-from routes.profile import *
+from routes.todo import toddo
+from routes.user import userr
+from routes.tag import tagg
+from routes.history import archive
+from routes.profile import proffile
 from models.todo import Todo
 from models.user import User
+
+app.register_blueprint(toddo)
+app.register_blueprint(userr)
+app.register_blueprint(tagg)
+app.register_blueprint(archive)
+app.register_blueprint(proffile)
 
 login_manager = LoginManager()
 login_manager.login_view = 'login'
@@ -33,7 +39,7 @@ login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(user_id):
     # since the user_id is just the primary key of our user table, use it in the query for the user
-    return User.query.get(int(user_id))
+    return User.query.filter_by(id=int(user_id)).first()
 
 
 @app.route('/')

@@ -1,5 +1,5 @@
-from app import db, app
-from flask import redirect, url_for, render_template, request, flash
+from extensions import db
+from flask import redirect, url_for, render_template, request, flash, Blueprint
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from src.utils.email import send_email
@@ -7,12 +7,13 @@ from src.accounts.token import generate_token, confirm_token
 from models.user import User
 from datetime import datetime
 
+userr = Blueprint('userr', __name__)
 
-@app.route('/login')
+@userr.route('/login')
 def login():
     return render_template('signup_login.html')
 
-@app.route('/signup', methods = ['POST'])
+@userr.route('/signup', methods = ['POST'])
 def signup():
     email = request.form.get('email')
     username = request.form.get('username')
@@ -51,7 +52,7 @@ def signup():
 
     return redirect(url_for('inactive'))
 
-@app.route('/login', methods=['POST'])
+@userr.route('/login', methods=['POST'])
 def login_post():
     # login code goes here
     email = request.form.get('email')
@@ -71,14 +72,14 @@ def login_post():
     return redirect(url_for('todo'))
 
 
-@app.route('/logout')
+@userr.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
 
 
-@app.route("/confirm/<token>")
+@userr.route("/confirm/<token>")
 @login_required
 def confirm_email(token):
     if current_user.is_verified:
@@ -97,7 +98,7 @@ def confirm_email(token):
         return redirect(url_for('inactive'))
 
 
-@app.route("/inactive")
+@userr.route("/inactive")
 @login_required
 def inactive():
     if current_user.is_verified:
@@ -105,7 +106,7 @@ def inactive():
     return render_template("inactive.html")
 
 
-@app.route("/resend")
+@userr.route("/resend")
 @login_required
 def resend_confirmation():
     if current_user.is_verified:
@@ -119,11 +120,11 @@ def resend_confirmation():
     flash("A new confirmation email has been sent.", "success")
     return redirect(url_for("inactive"))
 
-@app.route("/forgot-password", methods=["GET"])
+@userr.route("/forgot-password", methods=["GET"])
 def forgot_password():
     return render_template('forgot-password.html')
 
-@app.route("/forgot-password", methods=["POST"])
+@userr.route("/forgot-password", methods=["POST"])
 def verify_and_send_passlink():
     email = request.form.get("email")
     user = User.query.filter_by(email = email).first()
@@ -141,7 +142,7 @@ def verify_and_send_passlink():
     return redirect(url_for("forgot_password"))
 
 
-@app.route("/password-reset/<token>", methods=["GET"])
+@userr.route("/password-reset/<token>", methods=["GET"])
 def password_reset_pre(token):
     email = confirm_token(token)
     user = User.query.filter_by(email = email).first()
@@ -152,7 +153,7 @@ def password_reset_pre(token):
     return render_template("password-reset.html")
 
 
-@app.route("/password-reset/<token>", methods=["POST"])
+@userr.route("/password-reset/<token>", methods=["POST"])
 def password_reset_post(token):
     email = confirm_token(token)
     user = User.query.filter_by(email = email).first()

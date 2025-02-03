@@ -11,8 +11,8 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
-# app.config.from_object('config.BaseConfig')
-app.config.from_object('config.DevelopmentConfig')
+app.config.from_object('config.BaseConfig')
+# app.config.from_object('config.DevelopmentConfig')
 
 db.init_app(app)
 cache = Cache(app)

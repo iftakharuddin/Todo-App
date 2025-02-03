@@ -8,7 +8,7 @@ def check_is_confirmed(func):
     def decorated_function(*args, **kwargs):
         if current_user.is_verified is False:
             flash("Please confirm your account!", "warning")
-            return redirect(url_for("inactive"))
+            return redirect(url_for("userr.inactive"))
         return func(*args, **kwargs)
 
     return decorated_function

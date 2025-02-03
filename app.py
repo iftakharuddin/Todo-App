@@ -45,7 +45,7 @@ def load_user(user_id):
 
 @app.route('/')
 def index(name=None):
-    return render_template('index.html', myname=name)
+    return redirect(url_for("userr.login"))
 
 @app.route('/home')
 def home():

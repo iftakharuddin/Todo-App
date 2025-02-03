@@ -37,13 +37,13 @@
       </p>
       <p>
         Didn't get the email?
-        <a href="{{ url_for('resend_confirmation') }}">Resend</a>.
+        <a href="{{ url_for('userr.resend_confirmation') }}">Resend</a>.
       </p>
   </div>
 
   <div style="display: flex; justify-content: center; align-items: flex-end; height: 50px;">
     {% if current_user.is_authenticated %}
-    <a href="{{ url_for('logout') }}" class="ui red button">
+    <a href="{{ url_for('userr.logout') }}" class="ui red button">
         Logout
     </a>
     {% endif %}

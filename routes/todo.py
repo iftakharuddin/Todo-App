@@ -31,7 +31,7 @@ def add_todo():
         todotag = Todotag(todo.id, int(tag))
         db.session.add(todotag)
     db.session.commit();
-    return redirect(url_for('todo'))
+    return redirect(url_for('toddo.todo'))
 
 @toddo.route('/todo/update/<int:id>')
 @login_required
@@ -39,7 +39,7 @@ def update_todo(id):
     todo = Todo.query.filter_by(id=id).first()
     todo.complete = not todo.complete
     db.session.commit()
-    return redirect(url_for('todo'))
+    return redirect(url_for('toddo.todo'))
 
 @toddo.route('/todo/edit/<int:id>')
 @login_required
@@ -56,7 +56,7 @@ def save_todo(id):
         todo.title = request.form.get('title')
         todo.priority_level = request.form.get('priority')
         db.session.commit()
-    return redirect(url_for('todo'))
+    return redirect(url_for('toddo.todo'))
 
 @toddo.route('/todo/delete/<int:id>')
 @login_required
@@ -64,7 +64,7 @@ def delete_todo(id = -1):
     todo = Todo.query.filter_by(id = id).first()
     todo.deleted = True
     db.session.commit()
-    return redirect(url_for('todo'))
+    return redirect(url_for('toddo.odo'))
 
 @toddo.route('/todo/bulkadd')
 @login_required

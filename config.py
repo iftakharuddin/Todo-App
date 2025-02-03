@@ -10,10 +10,11 @@ class BaseConfig:
     # SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
     #     'sqlite:///' + os.path.join(basedir, 'app.db')
     
-    # "postgresql://test:test@localhost:5431/test"
+    # "postgresql://todo_database_nbtl_user:GWGBKGmvWYupjzXqnLNpATMCp9u9oiIT@dpg-cug7ne56l47c739vkou0-a/todo_database_nbtl"
     SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL", "postgresql://todo_database_nbtl_user:GWGBKGmvWYupjzXqnLNpATMCp9u9oiIT@dpg-cug7ne56l47c739vkou0-a/todo_database_nbtl"
+        "DATABASE_URL", "postgresql://todo_database_nbtl_user:GWGBKGmvWYupjzXqnLNpATMCp9u9oiIT@dpg-cug7ne56l47c739vkou0-a.oregon-postgres.render.com/todo_database_nbtl"
     )
+    
     SECRET_KEY = 'iftakhar'
     SECURITY_PASSWORD_SALT = config("SECURITY_PASSWORD_SALT", default="very-important")
     
@@ -40,3 +41,6 @@ class BaseConfig:
 class DevelopmentConfig(BaseConfig):
     """Development configuration."""
     DEBUG = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get(
+        "DATABASE_URL", "postgresql://test:test@localhost:5431/test"
+    )

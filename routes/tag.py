@@ -20,7 +20,7 @@ def add_tagg():
     tag = Tag(name, current_user.id)
     db.session.add(tag)
     db.session.commit()
-    return redirect(url_for('tags'))
+    return redirect(url_for('tagg.tags'))
 
 @tagg.route('/tag/edit/<int:id>')
 @login_required
@@ -35,7 +35,7 @@ def save_tag(id):
     if tag: 
         tag.name = request.form.get('name')
         db.session.commit()
-    return redirect(url_for('tags'))
+    return redirect(url_for('tagg.tags'))
 
 @tagg.route('/tag/delete/<int:id>')
 @login_required
@@ -43,4 +43,4 @@ def delete_tag(id = -1):
     tag = Tag.query.filter_by(id = id).first()
     todo.deleted = True
     db.session.commit()
-    return redirect(url_for('tags'))
+    return redirect(url_for('tagg.tags'))

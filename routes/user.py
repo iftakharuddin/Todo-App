@@ -32,7 +32,7 @@ def signup():
 
     if user:
         flash('Email address already exists')
-        return redirect(url_for('login'))
+        return redirect(url_for('userr.login'))
     
     new_user = User(email=email, password=generate_password_hash(password, method='sha256'), username=username)
 
@@ -40,7 +40,7 @@ def signup():
     db.session.commit()
 
     token = generate_token(new_user.email)
-    confirm_url = url_for("confirm_email", token=token, _external=True)
+    confirm_url = url_for("userr.confirm_email", token=token, _external=True)
     html = render_template("confirm_email.html", confirm_url=confirm_url)
     subject = "Please confirm your email"
     send_email(new_user.email, subject, html)
@@ -50,7 +50,7 @@ def signup():
     flash("A confirmation email has been sent via email.", "success")
     # return redirect(url_for("accounts.inactive"))
 
-    return redirect(url_for('inactive'))
+    return redirect(url_for('userr.inactive'))
 
 @userr.route('/login', methods=['POST'])
 def login_post():
@@ -65,18 +65,18 @@ def login_post():
     # take the user-supplied password, hash it, and compare it to the hashed password in the database
     if not user or not check_password_hash(user.password, password):
         flash('Please check your login details and try again.')
-        return redirect(url_for('login')) # if the user doesn't exist or password is wrong, reload the page
+        return redirect(url_for('userr.login')) # if the user doesn't exist or password is wrong, reload the page
 
     login_user(user, remember=remember)
     # if the above check passes, then we know the user has the right credentials
-    return redirect(url_for('todo'))
+    return redirect(url_for('toddo.todo'))
 
 
 @userr.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for('userr.login'))
 
 
 @userr.route("/confirm/<token>")
@@ -84,7 +84,7 @@ def logout():
 def confirm_email(token):
     if current_user.is_verified:
         flash("Account already confirmed.", "success")
-        return redirect(url_for("todo"))
+        return redirect(url_for("toddo.todo"))
     email = confirm_token(token)
     user = User.query.filter_by(email=current_user.email).first_or_404()
     if user.email == email:
@@ -92,17 +92,17 @@ def confirm_email(token):
         user.verified_on = datetime.now()
         db.session.commit()
         flash("You have confirmed your account. Thanks!", "success")
-        return redirect(url_for("todo"))
+        return redirect(url_for("toddo.todo"))
     else:
         flash("The confirmation link is invalid or has expired.", "danger")
-        return redirect(url_for('inactive'))
+        return redirect(url_for('userr.inactive'))
 
 
 @userr.route("/inactive")
 @login_required
 def inactive():
     if current_user.is_verified:
-        return redirect(url_for("todo"))
+        return redirect(url_for("toddo.todo"))
     return render_template("inactive.html")
 
 
@@ -111,14 +111,14 @@ def inactive():
 def resend_confirmation():
     if current_user.is_verified:
         flash("Your account has already been confirmed.", "success")
-        return redirect(url_for("todo"))
+        return redirect(url_for("toddo.todo"))
     token = generate_token(current_user.email)
-    confirm_url = url_for("confirm_email", token=token, _external=True)
+    confirm_url = url_for("userr.confirm_email", token=token, _external=True)
     html = render_template("confirm_email.html", confirm_url=confirm_url)
     subject = "Please confirm your email"
     send_email(current_user.email, subject, html)
     flash("A new confirmation email has been sent.", "success")
-    return redirect(url_for("inactive"))
+    return redirect(url_for("userr.inactive"))
 
 @userr.route("/forgot-password", methods=["GET"])
 def forgot_password():
@@ -130,16 +130,16 @@ def verify_and_send_passlink():
     user = User.query.filter_by(email = email).first()
     if not user: 
         flash("Invalid email or email not found.", "danger")
-        return redirect(url_for('forgot_password'))
+        return redirect(url_for('userr.forgot_password'))
     
     token = generate_token(user.email)
-    password_reset_url = url_for("password_reset_pre", token=token, _external=True)
+    password_reset_url = url_for("userr.password_reset_pre", token=token, _external=True)
     html = render_template("password-reset-email.html", reset_url=password_reset_url)
     subject = "Password reset email"
     send_email(user.email, subject, html)
 
     flash("Password reset email is sent.", "success")
-    return redirect(url_for("forgot_password"))
+    return redirect(url_for("userr.forgot_password"))
 
 
 @userr.route("/password-reset/<token>", methods=["GET"])
@@ -165,4 +165,4 @@ def password_reset_post(token):
     user.password = generate_password_hash(password, method='sha256')
     db.session.commit()
     flash("Password reset successful.")
-    return redirect(url_for('login'))
+    return redirect(url_for('userr.login'))

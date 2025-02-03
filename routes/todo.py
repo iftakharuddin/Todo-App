@@ -64,7 +64,7 @@ def delete_todo(id = -1):
     todo = Todo.query.filter_by(id = id).first()
     todo.deleted = True
     db.session.commit()
-    return redirect(url_for('toddo.odo'))
+    return redirect(url_for('toddo.todo'))
 
 @toddo.route('/todo/bulkadd')
 @login_required

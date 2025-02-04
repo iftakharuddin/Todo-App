@@ -41,6 +41,6 @@ def save_tag(id):
 @login_required
 def delete_tag(id = -1):
     tag = Tag.query.filter_by(id = id).first()
-    todo.deleted = True
+    tag.deleted = True
     db.session.commit()
     return redirect(url_for('tagg.tags'))
